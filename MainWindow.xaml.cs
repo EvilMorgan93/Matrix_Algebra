@@ -216,7 +216,7 @@ namespace Kursa
         }
 
         // Функция получения определителя матрицы
-        private int Determinate(int[,] array) // Функция нахождения определителя разложением по первой строке
+        private int Determinate(int[,] array) // рекурсивная функция нахождения определителя, разложением по первой строке
         {
             if (array.Length == 1)
                 return array[0, 0];
