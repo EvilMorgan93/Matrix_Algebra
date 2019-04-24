@@ -184,7 +184,7 @@ namespace Kursa
 
                     Transpose(size, matrix); // транспонируем матрицу алгебраических дополнений
                     text_result.Clear();
-                    text_result.Text += "Транспонированная матрица: \n";
+                    text_result.Text += "Обратная матрица: \n";
                     for (int i = 0; i < size; i++)
                     {
                         for (int j = 0; j < size; j++)
