@@ -15,6 +15,9 @@ namespace Kursa
 {
     partial class MainWindow : Window
     {
+        private int SIZE_ROWS; // количество строк
+        private int SIZE_COLUMNS; // количество столбцов
+
         public MainWindow()
         {
             InitializeComponent();
@@ -22,11 +25,12 @@ namespace Kursa
 
         private void Determinate_Button_Click(object sender, RoutedEventArgs e) // Нажатие кнопки "Определитель"
         {
-            int size = GetSize();
-            if (size > 0)
-            {
-                GetArray(out int[,] arr, size, text_matrix_1);
-                text_result.Text = "Определитель: \n" + Determinate(arr);
+            if (GetArray(out int[,] arr, text_matrix_1, size_row_1, size_column_1))
+            {              
+                if (size_row_1.Text != size_column_1.Text)
+                    MessageBox.Show("Нахождение определителя невозможно!"); 
+                else
+                    text_result.Text = "Определитель матрицы #1: \n" + Determinate(arr);
             }
         }
 
@@ -37,16 +41,14 @@ namespace Kursa
                 MessageBox.Show("Необходимо ввести число!");
             else
             {
-                int size = GetSize();
-                if (size > 0)
+                if (GetArray(out int[,] array, text_matrix_1, size_row_1, size_column_1))
                 {
-                    GetArray(out int[,] array, size, text_matrix_1);
                     int score = int.Parse(scalar_text.Text);
                     text_result.Clear();
-                    text_result.Text += $"Умножение матрицы на {score}\n";
-                    for (int i = 0; i < size; i++)
+                    text_result.Text += $"Умножение матрицы #1 на {score}\n";
+                    for (int i = 0; i < SIZE_ROWS; i++)
                     {
-                        for (int j = 0; j < size; j++)
+                        for (int j = 0; j < SIZE_COLUMNS; j++)
                         {
                             array[i, j] *= score;
                             text_result.Text += array[i, j] + " ";
@@ -59,55 +61,48 @@ namespace Kursa
 
         private void Transpose_Button_Click(object sender, RoutedEventArgs e) // Кнопка "Транспонирование"
         {
-            int size = GetSize();
-            if (size > 0)
+            if (GetArray(out int[,] array, text_matrix_1, size_row_1, size_column_1))
             {
-                GetArray(out int[,] array, size, text_matrix_1);
-                Transpose(size, array);
+                int[,] transpose = Transpose(array);
                 text_result.Clear();
-                text_result.Text += "Транспонированная матрица: \n";
-                for (int i = 0; i < size; i++)
+                text_result.Text += "Транспонированная матрица #1: \n";
+                for (int i = 0; i < SIZE_COLUMNS; i++)
                 {
-                    for (int j = 0; j < size; j++)
+                    for (int j = 0; j < SIZE_ROWS; j++)
                     {
-                        text_result.Text += array[i, j].ToString() + " ";
+                        text_result.Text += transpose[i, j].ToString() + " ";
                     }
                     text_result.Text += "\r\n";
                 }
             }
         }
 
-        private void Transpose(int size, int[,] array) // алгоритм транспонирования
+        private int[,] Transpose(int[,] array) // алгоритм транспонирования
         {
-            for (int i = 1; i < size; i++)
+            int[,] transpose = new int[SIZE_COLUMNS, SIZE_ROWS];
+            for (int i = 0; i < SIZE_COLUMNS; i++)
             {
-                for (int j = 0; j < i; j++)
+                for (int j = 0; j < SIZE_ROWS; j++)
                 {
-                    int temp = array[i, j];
-                    array[i, j] = array[j, i];
-                    array[j, i] = temp;
+                    transpose[i, j] = array[j, i];
                 }
             }
+            return transpose;
         }
 
         private void Sum_Button_Click(object sender, RoutedEventArgs e) // Кнопка "Сложение матриц"
         {
-            int size = GetSize();
-            if (size > 0)
+            if (size_row_1.Text != size_row_2.Text || size_column_1.Text != size_column_2.Text) // проверка на совпадение размерности матриц
+                MessageBox.Show("Введенные матрицы должны быть одинакового размера!");
+            else
             {
-                if (text_matrix_1.Text.Split(new char[] { ' ', '\r', '\n', '\t', '\0' },
-                StringSplitOptions.RemoveEmptyEntries).Length != text_matrix_2.Text.Split(new char[] { ' ', '\r', '\n', '\t', '\0' },
-                StringSplitOptions.RemoveEmptyEntries).Length) // проверка на совпадение размерности матриц
-                    MessageBox.Show("Введенные матрицы должны быть одинакового размера!");
-                else
+                if (GetArray(out int[,] array1, text_matrix_1, size_row_1, size_column_1) && GetArray(out int[,] array2, text_matrix_2, size_row_2, size_column_2))
                 {
-                    GetArray(out int[,] array1, size, text_matrix_1);
-                    GetArray(out int[,] array2, size, text_matrix_2);
                     text_result.Clear();
                     text_result.Text += "Сумма двух матриц: \n";
-                    for (int i = 0; i < size; i++)
+                    for (int i = 0; i < SIZE_ROWS; i++)
                     {
-                        for (int j = 0; j < size; j++)
+                        for (int j = 0; j < SIZE_COLUMNS; j++)
                         {
                             text_result.Text += (array1[i, j] + array2[i, j]).ToString() + " ";
                         }
@@ -119,26 +114,22 @@ namespace Kursa
 
         private void Mult_Button_Click(object sender, RoutedEventArgs e) // Кнопка "Произведение матриц"
         {
-            int size = GetSize();
-            if (size > 0)
+            if (size_column_1.Text != size_row_2.Text)
+                MessageBox.Show("Умножение матриц недопустимо!");
+            else
             {
-                if (text_matrix_1.Text.Split(new char[] { ' ', '\r', '\n', '\t', '\0' },
-                StringSplitOptions.RemoveEmptyEntries).Length != text_matrix_2.Text.Split(new char[] { ' ', '\r', '\n', '\t', '\0' },
-                StringSplitOptions.RemoveEmptyEntries).Length) 
-                    MessageBox.Show("Умножение матриц недопустимо!");
-                else
+                if (GetArray(out int[,] array1, text_matrix_1, size_row_1, size_column_1) &&
+                GetArray(out int[,] array2, text_matrix_2, size_row_2, size_column_2))
                 {
-                    GetArray(out int[,] array1, size, text_matrix_1);
-                    GetArray(out int[,] array2, size, text_matrix_2);
                     text_result.Clear();
                     text_result.Text += "Произведение двух матриц: \n";
-                    int[,] temp = new int[size, size]; // матрица для умноженных элементов
-                    for (int i = 0; i < size; i++)
+                    int[,] temp = new int[SIZE_ROWS, SIZE_COLUMNS]; // матрица для умноженных элементов
+                    for (int i = 0; i < SIZE_ROWS; i++)
                     {
-                        for (int j = 0; j < size; j++)
+                        for (int j = 0; j < SIZE_COLUMNS; j++)
                         {
                             temp[i, j] = 0;
-                            for (int k = 0; k < size; k++)
+                            for (int k = 0; k < SIZE_COLUMNS; k++)
                             {
                                 temp[i, j] += array1[i, k] * array2[k, j];
                             }
@@ -152,26 +143,26 @@ namespace Kursa
 
         private void Inverse_Button_Click(object sender, RoutedEventArgs e) // Кнопка "Обратная матрица"
         {
-            int size = GetSize();
-            if (size > 0)
+            if (GetArray(out int[,] array, text_matrix_1, size_row_1, size_column_1))
             {
-                GetArray(out int[,] array, size, text_matrix_1);
-                if (Determinate(array) == 0) // проверка на существование обратной матрицы
+                if (size_row_1.Text != size_column_1.Text)
+                    MessageBox.Show("Выберите квадратную матрицу");
+                else if (Determinate(array) == 0) // проверка на существование обратной матрицы
                     MessageBox.Show("Обратной матрицы не существует");
                 else
                 {
-                    int[,] matrix = new int[size, size]; // матрица алгебраических дополнений
-                    for (int i = 0; i < size; i++)
-                        for (int j = 0; j < size; j++)
+                    int[,] matrix = new int[SIZE_ROWS, SIZE_COLUMNS]; // матрица алгебраических дополнений
+                    for (int i = 0; i < SIZE_ROWS; i++)
+                        for (int j = 0; j < SIZE_COLUMNS; j++)
                         {
                             int k = i; int k1 = j;
-                            int[,] temp = new int[size - 1, size - 1];
+                            int[,] temp = new int[SIZE_ROWS - 1, SIZE_COLUMNS - 1];
                             int s = 0;
-                            for (int m = 0; m < size; ++m)
+                            for (int m = 0; m < SIZE_COLUMNS; ++m)
                                 if (m != k)
                                 {
                                     int s1 = 0;
-                                    for (int n = 0; n < size; ++n)
+                                    for (int n = 0; n < SIZE_COLUMNS; ++n)
                                         if (n != k1)
                                         {
                                             temp[s, s1] = array[m, n];
@@ -182,14 +173,14 @@ namespace Kursa
                             matrix[i, j] = (int)Math.Pow(-1, k + 1 + k1 + 1) * Determinate(temp); // проверка знака и запись в матрицу алгебраических дополнений
                         }
 
-                    Transpose(size, matrix); // транспонируем матрицу алгебраических дополнений
+                    int[,] result = Transpose(matrix); // транспонируем матрицу алгебраических дополнений
                     text_result.Clear();
-                    text_result.Text += "Обратная матрица: \n";
-                    for (int i = 0; i < size; i++)
+                    text_result.Text += "Обратная матрица #1: \n";
+                    for (int i = 0; i < SIZE_ROWS; i++)
                     {
-                        for (int j = 0; j < size; j++)
+                        for (int j = 0; j < SIZE_COLUMNS; j++)
                         {
-                            text_result.Text += matrix[i, j] + $"/{Determinate(array)} ";
+                            text_result.Text += result[i, j] + $"/{Determinate(array)} ";
                         }
                         text_result.Text += "\r\n";
                     }
@@ -198,21 +189,28 @@ namespace Kursa
         }
 
         // Функция считывания массива из TextBox
-        private void GetArray(out int[,] array, int size, TextBox textbox)
+        private bool GetArray(out int[,] array, TextBox textbox, ComboBox size_row, ComboBox size_column) // Функция получения матрицы 
         {
-            // Заносим числа из TextBox в одномерный массив
-            int[] s = textbox.Text.Split(new char[] { ' ', '\r', '\n', '\t', '\0' },
-                StringSplitOptions.RemoveEmptyEntries).Select(x => int.Parse(x)).ToArray();
-            int[,] ar = new int[size, size]; // считываем из одномерного массива в двумерный 
-            int k = 0;
-            for (int i = 0; i < size; i++)
+            if (GetSize(size_row, size_column, textbox) == true) // Если выбранная размерность и введенная матрица совпала
             {
-                for (int j = 0; j < size; j++)
+                // Заносим числа из TextBox в одномерный массив
+                int[] s = textbox.Text.Split(new char[] { ' ', '\r', '\n', '\t', '\0' },
+                    StringSplitOptions.RemoveEmptyEntries).Select(x => int.Parse(x)).ToArray();
+                int[,] ar = new int[SIZE_ROWS, SIZE_COLUMNS]; // считываем из одномерного массива в двумерный 
+                int k = 0;
+                for (int i = 0; i < SIZE_ROWS; i++)
                 {
-                    ar[i, j] = s[k++];
+                    for (int j = 0; j < SIZE_COLUMNS; j++)
+                    {
+                        ar[i, j] = s[k++];
+                    }
                 }
+                array = ar;
+                return true;
             }
-            array = ar;
+            else
+                array = null;
+            return false;
         }
 
         // Функция получения определителя матрицы
@@ -247,36 +245,36 @@ namespace Kursa
             }
             return result;
         }
-       
-        private int GetSize() // Функция получения размера матрицы
+
+        private bool GetSize(ComboBox size_row, ComboBox size_column, TextBox textbox) // Функция получения размера матрицы
         {
-            int size = 0;
-            if (matrix_size.SelectedIndex < 0) // проверка на выбор размерности
-                MessageBox.Show("Выберите размерность матрицы");
-            else
+            if (size_row.SelectedIndex < 0 || size_column.SelectedIndex < 0) // проверка на выбор размерности
             {
-                // ПРОВЕРКА НА СОВПАДЕНИЕ ЗАПОЛНЕННОЙ МАТРИЦЫ С ВЫБОРОМ РАЗМЕРНОСТИ
-                if (matrix_size.Text == "3X3" && text_matrix_1.Text.Split(new char[] { ' ', '\r', '\n', '\t', '\0' },
-                    StringSplitOptions.RemoveEmptyEntries).Length == 9)
-                    size = 3;
-                else if (matrix_size.Text == "2X2" && text_matrix_1.Text.Split(new char[] { ' ', '\r', '\n', '\t', '\0' },
-                    StringSplitOptions.RemoveEmptyEntries).Length == 4)
-                    size = 2;
-                else if (matrix_size.Text == "4X4" && text_matrix_1.Text.Split(new char[] { ' ', '\r', '\n', '\t', '\0' },
-                    StringSplitOptions.RemoveEmptyEntries).Length == 16)
-                    size = 4;
-                else if (matrix_size.Text == "5X5" && text_matrix_1.Text.Split(new char[] { ' ', '\r', '\n', '\t', '\0' },
-                    StringSplitOptions.RemoveEmptyEntries).Length == 25)
-                    size = 5;
-                else
-                    MessageBox.Show("Заполненная матрица не совпадает с выбранной размерностью");
+                MessageBox.Show("Выберите размерность матрицы");
+                return false;
+            } // ОЧЕНЬ ПЛОХАЯ ПРОВЕРКА ЗАПОЛНЕННОЙ МАТРИЦЫ С ВЫБРАННОЙ РАЗМЕРНОСТЬЮ !!!!!!!!!!!!!!!!!!
+            else if (size_row.Text == "2" && size_column.Text == "2" && textbox.Text.Split(new char[] { ' ', '\r', '\n', '\t', '\0' },
+            StringSplitOptions.RemoveEmptyEntries).Length != 4 || size_row.Text == "2" && size_column.Text == "3" && textbox.Text.Split(new char[] { ' ', '\r', '\n', '\t', '\0' },
+            StringSplitOptions.RemoveEmptyEntries).Length != 6 || size_row.Text == "2" && size_column.Text == "4" && textbox.Text.Split(new char[] { ' ', '\r', '\n', '\t', '\0' },
+            StringSplitOptions.RemoveEmptyEntries).Length != 8 || size_row.Text == "3" && size_column.Text == "2" && textbox.Text.Split(new char[] { ' ', '\r', '\n', '\t', '\0' },
+            StringSplitOptions.RemoveEmptyEntries).Length != 6 || size_row.Text == "4" && size_column.Text == "2" && textbox.Text.Split(new char[] { ' ', '\r', '\n', '\t', '\0' },
+            StringSplitOptions.RemoveEmptyEntries).Length != 8 || size_row.Text == "3" && size_column.Text == "3" && textbox.Text.Split(new char[] { ' ', '\r', '\n', '\t', '\0' },
+            StringSplitOptions.RemoveEmptyEntries).Length != 9 || size_row.Text == "4" && size_column.Text == "3" && textbox.Text.Split(new char[] { ' ', '\r', '\n', '\t', '\0' },
+            StringSplitOptions.RemoveEmptyEntries).Length != 12 || size_row.Text == "3" && size_column.Text == "4" && textbox.Text.Split(new char[] { ' ', '\r', '\n', '\t', '\0' },
+            StringSplitOptions.RemoveEmptyEntries).Length != 12 || size_row.Text == "4" && size_column.Text == "4" && textbox.Text.Split(new char[] { ' ', '\r', '\n', '\t', '\0' },
+            StringSplitOptions.RemoveEmptyEntries).Length != 16)
+            {
+                MessageBox.Show("Введенная матрица не совпадает с выбранной размерностью!");
+                return false;
             }
-            return size;
+            int.TryParse(size_row.Text, out SIZE_ROWS);         // считывание количество строк
+            int.TryParse(size_column.Text, out SIZE_COLUMNS);   // и столбцов из combobox
+            return true;
         }
 
         // события на отлавливание клавиш
         private void Text1_KeyDown(object sender, KeyEventArgs e)
-        {
+         {
             // проверка на нажатие только цифр, пробела и enter
             if (!(((int)e.Key >= 34) && ((int)e.Key <= 43)) && !(((int)e.Key >= 74) && ((int)e.Key <= 83)) && (int)e.Key != 143)
                 e.Handled = true;
