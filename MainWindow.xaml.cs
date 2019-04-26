@@ -115,7 +115,7 @@ namespace Kursa
         private void Mult_Button_Click(object sender, RoutedEventArgs e) // Кнопка "Произведение матриц"
         {
             if (size_column_1.Text != size_row_2.Text)
-                MessageBox.Show("Умножение матриц недопустимо!");
+                MessageBox.Show("Умножение матриц невозможно!");
             else
             {
                 if (GetArray(out int[,] array1, text_matrix_1, size_row_1, size_column_1) &&
@@ -123,13 +123,12 @@ namespace Kursa
                 {
                     text_result.Clear();
                     text_result.Text += "Произведение двух матриц: \n";
-                    int[,] temp = new int[SIZE_ROWS, SIZE_COLUMNS]; // матрица для умноженных элементов
-                    for (int i = 0; i < SIZE_ROWS; i++)
+                    int[,] temp = new int[int.Parse(size_row_1.Text), int.Parse(size_column_2.Text)]; // матрица размером row1 * column2, для конечного вывода
+                    for (int i = 0; i < int.Parse(size_row_1.Text); i++)
                     {
-                        for (int j = 0; j < SIZE_COLUMNS; j++)
+                        for (int j = 0; j < int.Parse(size_column_2.Text); j++)
                         {
-                            temp[i, j] = 0;
-                            for (int k = 0; k < SIZE_COLUMNS; k++)
+                            for (int k = 0; k < int.Parse(size_row_2.Text); k++)
                             {
                                 temp[i, j] += array1[i, k] * array2[k, j];
                             }
