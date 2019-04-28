@@ -1,9 +1,9 @@
-﻿<Window x:Class="Kursa.MainWindow"
+﻿<Window x:Class="MatrixAlgebra.MainWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:Kursa"
+        xmlns:local="clr-namespace:MatrixAlgebra"
         mc:Ignorable="d"
         Title="Матричная алгебра" Height="650" Width="1000" WindowStartupLocation="CenterScreen" ResizeMode="CanMinimize" Icon="Resources\Icon.ico" >
     <Window.Background>
@@ -15,41 +15,41 @@
             <GradientStop Color="#FEAA8A8B" Offset="0.705"/>
         </LinearGradientBrush>
     </Window.Background>
-    <Grid>
-    <Button Content="Определитель" Margin="690,27,0,0" Width="200" Click="Determinate_Button_Click" Height="29" Background="#FF6C5656" Foreground="White"/>
-    <Button Content="Умножение на число" Margin="690,61,0,0" Width="200" Height="29" Click="Scalar_Button_Click" Background="#FF6C5656" Foreground="White"/>
-    <Button Content="Транспонирование" Margin="690,95,0,0" Click="Transpose_Button_Click" Background="#FF6C5656" Foreground="White" Width="200" Height="33"/>
-    <Button Content="Обратная матрица" Margin="690,209,0,0" Click="Inverse_Button_Click" Background="#FF6C5656" Foreground="White" Width="200" Height="33" RenderTransformOrigin="0.496,2.042"/>
-    <Button Content="Произведение матриц" Margin="690,171,0,0" Click="Mult_Button_Click" Background="#FF6C5656" Foreground="White" Width="200" Height="33"/>
-    <Button Content="Сложение матриц" Margin="690,133,0,0" Click="Sum_Button_Click" Background="#FF6C5656" Foreground="White"  Width="200" Height="33"/>
-    <Button Content="Выход" Margin="690,247,0,0" Click="Exit_Button_Click" Background="#FF6C5656" Foreground="White"  Width="200" Height="33"/>
-    <TextBox Name="text_matrix_1" AcceptsReturn="True" HorizontalAlignment="Left" Height="164" Margin="20,108,0,0" Text="0 0 0&#xA;0 0 0&#xA;0 0 0" Width="179" TextWrapping="Wrap" KeyDown="Text1_KeyDown"/>
-    <TextBox Name="text_result" Height="295" Margin="516,315,0,0" TextWrapping="Wrap" Width="468" IsReadOnly="True" Cursor="Arrow"/>
-    <TextBox Name="scalar_text" Height="29" Margin="895,61,0,0" TextWrapping="Wrap" Width="67" Background="#FF6C5656" Foreground="White" KeyDown="Text1_KeyDown" PreviewKeyDown="Scalar_text_PreviewKeyDown" MaxLength="4"/>
-    <TextBox Name="text_matrix_2" AcceptsReturn="True" Height="164" Margin="20,394,0,0" TextWrapping="Wrap" Width="179" KeyDown="Text1_KeyDown"/>
-    <TextBlock Height="29" Margin="20,27,0,0" TextWrapping="Wrap" Text="Выберите размерность матрицы #1: " Width="317" Cursor="Arrow"/>
-    <TextBlock Height="29" Margin="20,327,0,0" TextWrapping="Wrap" Text="Выберите размерность матрицы #2: " Width="317" Cursor="Arrow"/>
-    <TextBlock Height="23" Margin="20,80,0,0" TextWrapping="Wrap" Width="179" TextAlignment="Center" Cursor="Arrow" Text="Матрица #1"/>
-    <TextBlock Height="23" Margin="20,366,0,0" TextWrapping="Wrap" Width="179" TextAlignment="Center" Cursor="Arrow" Text="Матрица #2"/>
-    <TextBlock Height="23" Margin="516,287,0,0" TextWrapping="Wrap" Width="468" TextAlignment="Center" Cursor="Arrow" Text="Результат"/>
-    <ComboBox Name ="size_row_1" HorizontalAlignment="Left" Margin="342,27,0,0" VerticalAlignment="Top" Width="46" Height="29" Background="#FF6C5656">
-        <TextBlock>2</TextBlock>
-        <TextBlock>3</TextBlock>
-        <TextBlock>4</TextBlock>
-        <TextBlock>5</TextBlock>
-    </ComboBox>
-    <ComboBox Name ="size_row_2" HorizontalAlignment="Left" Margin="342,327,0,0" VerticalAlignment="Top" Width="46" Height="29" Background="#FF6C5656">
-        <TextBlock>2</TextBlock>
-        <TextBlock>3</TextBlock>
-        <TextBlock>4</TextBlock>
-        <TextBlock>5</TextBlock>
-    </ComboBox>
-    <ComboBox Name="size_column_1" HorizontalAlignment="Left" Margin="393,27,0,0" VerticalAlignment="Top" Width="46" Height="29">
-        <TextBlock>2</TextBlock>
-        <TextBlock>3</TextBlock>
-        <TextBlock>4</TextBlock>
-        <TextBlock>5</TextBlock>
-    </ComboBox>
+    <Grid Name="grid">
+        <Button Content="Определитель" Margin="690,27,0,0" Width="200" Click="Determinate_Button_Click" Height="29" Background="#FF6C5656" Foreground="White"/>
+        <Button Content="Умножение на число" Margin="690,61,0,0" Width="200" Height="29" Click="Scalar_Button_Click" Background="#FF6C5656" Foreground="White"/>
+        <Button Content="Транспонирование" Margin="690,95,0,0" Click="Transpose_Button_Click" Background="#FF6C5656" Foreground="White" Width="200" Height="33"/>
+        <Button Content="Обратная матрица" Margin="690,209,0,0" Click="Inverse_Button_Click" Background="#FF6C5656" Foreground="White" Width="200" Height="33" RenderTransformOrigin="0.496,2.042"/>
+        <Button Content="Произведение матриц" Margin="690,171,0,0" Click="Mult_Button_Click" Background="#FF6C5656" Foreground="White" Width="200" Height="33"/>
+        <Button Content="Сложение матриц" Margin="690,133,0,0" Click="Sum_Button_Click" Background="#FF6C5656" Foreground="White"  Width="200" Height="33"/>
+        <Button Content="Выход" Margin="690,247,0,0" Click="Exit_Button_Click" Background="#FF6C5656" Foreground="White"  Width="200" Height="33"/>
+        <TextBox Name="text_matrix_1" AcceptsReturn="True" HorizontalAlignment="Left" Height="164" Margin="20,108,0,0" Text="0 0 0&#xA;0 0 0&#xA;0 0 0" Width="179" TextWrapping="Wrap" KeyDown="Text1_KeyDown"/>
+        <TextBox Name="text_result" Height="295" Margin="516,315,0,0" TextWrapping="Wrap" Width="468" IsReadOnly="True" Cursor="Arrow"/>
+        <TextBox Name="scalar_text" Height="29" Margin="895,61,0,0" TextWrapping="Wrap" Width="67" Background="#FF6C5656" Foreground="White" KeyDown="Text1_KeyDown" PreviewKeyDown="Scalar_text_PreviewKeyDown" MaxLength="4"/>
+        <TextBox Name="text_matrix_2" AcceptsReturn="True" Height="164" Margin="20,394,0,0" TextWrapping="Wrap" Width="179" KeyDown="Text1_KeyDown"/>
+        <TextBlock Height="29" Margin="20,27,0,0" TextWrapping="Wrap" Text="Выберите размерность матрицы #1: " Width="317" Cursor="Arrow"/>
+        <TextBlock Height="29" Margin="20,327,0,0" TextWrapping="Wrap" Text="Выберите размерность матрицы #2: " Width="317" Cursor="Arrow"/>
+        <TextBlock Height="23" Margin="20,80,0,0" TextWrapping="Wrap" Width="179" TextAlignment="Center" Cursor="Arrow" Text="Матрица #1"/>
+        <TextBlock Height="23" Margin="20,366,0,0" TextWrapping="Wrap" Width="179" TextAlignment="Center" Cursor="Arrow" Text="Матрица #2"/>
+        <TextBlock Height="23" Margin="516,287,0,0" TextWrapping="Wrap" Width="468" TextAlignment="Center" Cursor="Arrow" Text="Результат"/>
+        <ComboBox Name ="size_row_1" HorizontalAlignment="Left" Margin="342,27,0,0" VerticalAlignment="Top" Width="46" Height="29" Background="#FF6C5656">
+            <TextBlock>2</TextBlock>
+            <TextBlock>3</TextBlock>
+            <TextBlock>4</TextBlock>
+            <TextBlock>5</TextBlock>
+        </ComboBox>
+        <ComboBox Name ="size_row_2" HorizontalAlignment="Left" Margin="342,327,0,0" VerticalAlignment="Top" Width="46" Height="29" Background="#FF6C5656">
+            <TextBlock>2</TextBlock>
+            <TextBlock>3</TextBlock>
+            <TextBlock>4</TextBlock>
+            <TextBlock>5</TextBlock>
+        </ComboBox>
+        <ComboBox Name="size_column_1" HorizontalAlignment="Left" Margin="393,27,0,0" VerticalAlignment="Top" Width="46" Height="29">
+            <TextBlock>2</TextBlock>
+            <TextBlock>3</TextBlock>
+            <TextBlock>4</TextBlock>
+            <TextBlock>5</TextBlock>
+        </ComboBox>
         <ComboBox Name="size_column_2" HorizontalAlignment="Left" Margin="393,327,0,0" VerticalAlignment="Top" Width="46" Height="29">
             <TextBlock>2</TextBlock>
             <TextBlock>3</TextBlock>
@@ -58,4 +58,3 @@
         </ComboBox>
     </Grid>
 </Window>
-
