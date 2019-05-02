@@ -164,11 +164,11 @@ namespace MatrixAlgebra
                             int k = i; int k1 = j;
                             int[,] temp = new int[SIZE_ROWS - 1, SIZE_COLUMNS - 1];
                             int s = 0;
-                            for (int m = 0; m < SIZE_COLUMNS; ++m)
+                            for (int m = 0; m < SIZE_COLUMNS; m++)
                                 if (m != k)
                                 {
                                     int s1 = 0;
-                                    for (int n = 0; n < SIZE_COLUMNS; ++n)
+                                    for (int n = 0; n < SIZE_COLUMNS; n++)
                                         if (n != k1)
                                         {
                                             temp[s, s1] = array[m, n];
@@ -288,10 +288,10 @@ namespace MatrixAlgebra
             StringSplitOptions.RemoveEmptyEntries).Length != 20 || size_row.Text == "5" && size_column.Text == "4" && textbox.Text.Split(new char[] { ' ', '\r', '\n', '\t', '\0' },
             StringSplitOptions.RemoveEmptyEntries).Length != 20 || size_row.Text == "5" && size_column.Text == "5" && textbox.Text.Split(new char[] { ' ', '\r', '\n', '\t', '\0' },
             StringSplitOptions.RemoveEmptyEntries).Length != 25) 
-            {
-                MessageBox.Show("Введенная матрица не совпадает с выбранной размерностью!", "Ошибка!", MessageBoxButton.OK, MessageBoxImage.Warning);
-                return false;
-            }
+                 {
+                     MessageBox.Show("Введенная матрица не совпадает с выбранной размерностью!", "Ошибка!", MessageBoxButton.OK, MessageBoxImage.Warning);
+                     return false;
+                 }
             int.TryParse(size_row.Text, out SIZE_ROWS);         // считывание количество строк
             int.TryParse(size_column.Text, out SIZE_COLUMNS);   // и столбцов из combobox
             return true;
